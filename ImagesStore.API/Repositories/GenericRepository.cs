@@ -1,11 +1,12 @@
-﻿using ImagesStore.API.Interfaces;
-using ImagesStore.API.Models;
+﻿using ImagesStore.API.Data;
+using ImagesStore.API.Interfaces;
 
 namespace ImagesStore.API.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly ApplicationContext _context;
+
         public GenericRepository(ApplicationContext context)
         {
             _context = context;

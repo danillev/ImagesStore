@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  imagesstore.api:
+    image: ${DOCKER_REGISTRY-}imagesstoreapi
+    build:
+      context: .
+      dockerfile: ImagesStore.API/Dockerfile
+    ports:
+    - "5000:80"

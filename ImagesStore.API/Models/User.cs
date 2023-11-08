@@ -8,13 +8,5 @@ namespace ImagesStore.API.Models
     {
         
     }
-    public class Test
-    {
-        public Test() {
-
-            User user = new User();
-                    
-        }
-        
-    }
+    
 }

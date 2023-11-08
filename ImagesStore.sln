@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesStore.Web", "ImagesStore.Web\ImagesStore.Web.csproj", "{6BD40625-69FE-4908-8BF3-CEB75AEFBE1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesStore.Web", "ImagesStore.Web\ImagesStore.Web.csproj", "{6BD40625-69FE-4908-8BF3-CEB75AEFBE1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesStore.API", "ImagesStore.API\ImagesStore.API.csproj", "{348A6234-0E36-4F84-871F-F0DA05281299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesStore.API", "ImagesStore.API\ImagesStore.API.csproj", "{348A6234-0E36-4F84-871F-F0DA05281299}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0900429A-9A80-4B44-8C30-04B193F32F3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{348A6234-0E36-4F84-871F-F0DA05281299}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{348A6234-0E36-4F84-871F-F0DA05281299}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{348A6234-0E36-4F84-871F-F0DA05281299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0900429A-9A80-4B44-8C30-04B193F32F3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0900429A-9A80-4B44-8C30-04B193F32F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0900429A-9A80-4B44-8C30-04B193F32F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0900429A-9A80-4B44-8C30-04B193F32F3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
