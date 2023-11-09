@@ -1,0 +1,7 @@
+.vs/
+obj/
+bin/
+ImagesStore.API/bin/
+ImagesStore.API/obj/
+ImagesStore.Web/bin/
+ImagesStore.Web/obj/

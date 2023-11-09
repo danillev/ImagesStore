@@ -10,5 +10,6 @@ namespace ImagesStore.API.Data
             Database.Migrate();
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Image> Images { get; set; }
     }
 }
