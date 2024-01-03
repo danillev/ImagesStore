@@ -1,12 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ImagesStore.API.Models
 {
-    public class User : IdentityUser 
+    
+    [Index("Email", IsUnique = true)]
+    public class User : IdentityUser<int>
     {
-        
+        [Required]
+        [EmailAddress]
+        public override string Email { get; set; }
+
+
     }
     
 }

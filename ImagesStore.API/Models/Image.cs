@@ -4,12 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ImagesStore.API.Models
 {
-    public class Image
+    public record class Image
     {
         [Key]
-        public string Id { get; set; } = default!;
+        public int Id { get; set; } = default!;
         [Required]
-        public string ImageBase64 { get; set; }
+        public string ImageName { get; set; }
+        [Required]
+        public string ImagePath { get; set; }
+        [Required]
+        public string ImageType { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
     }

@@ -1,11 +1,12 @@
 ﻿using ImagesStore.API.Data;
 using ImagesStore.API.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ImagesStore.API.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly ApplicationContext _context;
+        protected ApplicationContext _context;
 
         public GenericRepository(ApplicationContext context)
         {

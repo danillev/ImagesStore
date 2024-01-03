@@ -2,8 +2,11 @@
 using ImagesStore.API.Interfaces;
 using ImagesStore.API.Models;
 using ImagesStore.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,28 +14,33 @@ namespace ImagesStore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //
     public class UserController : ControllerBase
     {
         private readonly ApplicationContext _context;
+        private readonly UserGenericRepository _userRepository;
+       
 
         public UserController(ApplicationContext context)
         {
             _context = context;
+            _userRepository = new UserGenericRepository(_context);
         }
 
-        // GET: api/<UserController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAll()
         {
-            return await _context.Users.ToListAsync();
+            var users = _userRepository.GetAll();
+            return Ok(users);
 
         }
 
+        
         // GET api/<UserController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> Get(int id)
         {
-            User user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id.ToString());
+            User user = _userRepository.GetById(id);
             if(user == null) 
             { 
                 return NotFound(); 
@@ -48,8 +56,10 @@ namespace ImagesStore.API.Controllers
             {
                 return BadRequest();
             }
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            PasswordHasher<User> hasher = new PasswordHasher<User>();
+            user.PasswordHash = hasher.HashPassword(user, user.PasswordHash);
+            _userRepository.Create(user);
+            _userRepository.Save();
             return Ok(user);
         }
 
@@ -65,8 +75,8 @@ namespace ImagesStore.API.Controllers
             {
                 return NotFound();
             }
-            _context.Update(user);
-            await _context.SaveChangesAsync();
+            _userRepository.Update(user);
+            _userRepository.Save();
             return Ok(user);
         }
 
@@ -74,13 +84,13 @@ namespace ImagesStore.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> Delete(int id)
         {
-            User user = _context.Users.FirstOrDefault(x => x.Id == id.ToString());
+            User user = _userRepository.GetById(id);
             if (user == null)
             {
                 return NotFound();
             }
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            _userRepository.Delete(user);
+            _userRepository.Save();
             return Ok(user);
         }
     }
