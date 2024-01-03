@@ -1,7 +1,10 @@
 .vs/
 obj/
 bin/
+
 ImagesStore.API/bin/
 ImagesStore.API/obj/
+ImagesStore.API/Images/
+
 ImagesStore.Web/bin/
 ImagesStore.Web/obj/
