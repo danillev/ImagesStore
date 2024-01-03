@@ -28,7 +28,7 @@ namespace ImagesStore.API.Models
             ImageName = file.Name;
             UserId = userId.ToString();
             ImageType = file.ContentType;
-            ImagePath = Path.Combine("Images", userId.ToString(), imagePath);
+            ImagePath = imagePath;
         }
     }
         

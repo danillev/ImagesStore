@@ -40,7 +40,7 @@ namespace ImagesStore.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> Get(int id)
         {
-            User user = _userRepository.GetById(id);
+            User user = _userRepository.GetById(id).Result;
             if(user == null) 
             { 
                 return NotFound(); 
@@ -84,7 +84,7 @@ namespace ImagesStore.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> Delete(int id)
         {
-            User user = _userRepository.GetById(id);
+            User user = _userRepository.GetById(id).Result;
             if (user == null)
             {
                 return NotFound();

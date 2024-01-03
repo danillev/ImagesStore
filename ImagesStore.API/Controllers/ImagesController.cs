@@ -90,6 +90,11 @@ namespace ImagesStore.API.Controllers
         {
             string imagePath = Path.Combine("Images", userId.ToString(), Path.GetFileName(file.FileName));
             string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), imagePath);
+            string directory = Path.GetDirectoryName(physicalPath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
 
             using (var fileStreamer = new FileStream(physicalPath, FileMode.Create))
             {
@@ -108,7 +113,7 @@ namespace ImagesStore.API.Controllers
 
 
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<ActionResult> GetImagesByUserId(string userId)
         {
             IEnumerable<Image> images = await _imageRepository.GetByUserId(userId);

@@ -1,6 +1,7 @@
 ﻿using ImagesStore.API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -13,7 +14,6 @@ namespace ImagesStore.API.Services
         public ServiceFacade(WebApplicationBuilder webAppBuilder)
         {
             _options = new AuthOptions();
-
 
             Configure(webAppBuilder);
             _webApplication = webAppBuilder.Build();
@@ -45,6 +45,7 @@ namespace ImagesStore.API.Services
             ConfigureControllers(builder);
             ConfigureApiExplorer(builder);
             ConfigureSwaggerGen(builder);
+            ConfigureSinglot(builder);
         }
 
         private void ConfigureDbContext(WebApplicationBuilder builder)
@@ -122,6 +123,11 @@ namespace ImagesStore.API.Services
                     }
                 });
             });
+        }
+
+        private void ConfigureSinglot(WebApplicationBuilder builder)
+        {
+            builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
         }
     }
 }
