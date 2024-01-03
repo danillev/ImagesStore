@@ -1,5 +1,6 @@
 ﻿using ImagesStore.API.Data;
 using ImagesStore.API.Models;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace ImagesStore.API.Repositories
@@ -12,14 +13,19 @@ namespace ImagesStore.API.Repositories
             _context = context;
         }
 
-        public User GetByUserName(string username)
+        public async ValueTask<User> GetByUserName(string username)
         {
-            return _context.Set<User>().FirstOrDefault(x => x.UserName == username);
+            return await _context.Set<User>().FirstOrDefaultAsync(x => x.UserName == username);
         }
 
-        public User GetByEmail(string email) 
+        public async ValueTask<User> GetByEmail(string email) 
         {
-            return _context.Set<User>().FirstOrDefault(x => x.Email == email);
+            return await _context.Set<User>().FirstOrDefaultAsync(x => x.Email == email);
+        }
+
+        public async ValueTask<bool> UserExists(int userId)
+        {
+            return _context.Set<User>().FindAsync(userId) != null;
         }
     }
 }

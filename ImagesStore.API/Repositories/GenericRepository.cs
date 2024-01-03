@@ -13,34 +13,36 @@ namespace ImagesStore.API.Repositories
             _context = context;
         }
 
-        public IEnumerable<T> GetAll()
+        public async ValueTask<IEnumerable<T>> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async ValueTask<T> GetById(int id)
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
         }
 
-        public void Update(T entity) 
+        public Task Update(T entity)
         {
             _context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            return Task.CompletedTask;
         }
 
-        public void Delete(T entity)
+        public Task Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
+            return Task.CompletedTask;
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;

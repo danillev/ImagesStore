@@ -7,14 +7,29 @@ namespace ImagesStore.API.Models
     public record class Image
     {
         [Key]
-        public int Id { get; set; } = default!;
+        public int Id { get; init; } = default!;
         [Required]
-        public string ImageName { get; set; }
+        public string ImageName { get; init; }
         [Required]
-        public string ImagePath { get; set; }
+        public string ImagePath { get; init; }
         [Required]
-        public string ImageType { get; set; }
+        public string ImageType { get; init; }
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
+
+
+        public Image()
+        {
+
+        }
+
+        public Image(IFormFile file, int userId, string imagePath)
+        {
+            ImageName = file.Name;
+            UserId = userId.ToString();
+            ImageType = file.ContentType;
+            ImagePath = Path.Combine("Images", userId.ToString(), imagePath);
+        }
     }
+        
 }

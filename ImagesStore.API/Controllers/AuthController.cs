@@ -36,7 +36,7 @@ namespace ImagesStore.API.Controllers
                 return BadRequest("Invalid login or password");
             }
 
-            User user = _userRepository.GetByEmail(loginData.Email);
+            User user = _userRepository.GetByEmail(loginData.Email).Result;
             if (user == null)
             {
                 return NotFound(new { Message = "User not found" });

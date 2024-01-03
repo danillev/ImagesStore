@@ -25,59 +25,84 @@ namespace ImagesStore.API.Controllers
             _userRepository = new UserGenericRepository(context);
             _fileProvider = fileProvider;
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> Post(IFormFileCollection files, int userId)
         {
-            if(_userRepository.GetById(userId) == null)
+            if (!_userRepository.UserExists(userId).Result)
             {
                 return Ok("User not found");
             }
 
-            if(files == null ||  files.Count == 0)
+            if (files == null || files.Count == 0)
             {
                 return BadRequest("No files uploaded");
             }
 
-            List<string> errors = new List<string>();
-            foreach (var file in files)
+            List<string> errors = await ProcessFiles(files, userId);
+
+            if (errors.Count > 0)
             {
-                if (!IsImage(Path.GetExtension(file.FileName)))
-                {
-                    errors.Add($"File '{file.FileName}' is not an image");
-                    continue;
-                }
-                if (file.Length > 10 * 1024 * 1024)
-                {
-                    errors.Add($"File '{file.FileName}' is too large. Maximum allowed size is 10 MB");
-                    continue;
-                }
-
-                string imagePath = Path.Combine("Images", userId.ToString(), Path.GetFileName(file.FileName));
-                string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), imagePath);
-                using (var fileStreamer = new FileStream(physicalPath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStreamer).ConfigureAwait(false);
-                }
-
-                Image image = new Image
-                {
-                    ImageName = file.Name,
-                    UserId = userId.ToString(),
-                    ImageType = file.ContentType,
-                    ImagePath = Path.Combine("Images", userId.ToString(), imagePath),
-                };
-
-                _imageRepository.Create(image);
-                _imageRepository.Save();
+                return BadRequest(errors);
             }
-            if(errors.Count > 0) { return BadRequest(errors); }
+
             return Ok();
         }
 
-        private bool IsImage (string fileExtension)
+        private async Task<List<string>> ProcessFiles(IFormFileCollection files, int userId)
+        {
+            List<string> errors = new List<string>();
+
+            foreach (var file in files)
+            {
+                errors.AddRange(await ProcessFile(file, userId));
+            }
+
+            return errors;
+        }
+
+        private async ValueTask<List<string>> ProcessFile(IFormFile file, int userId)
+        {
+            List<string> errors = new List<string>();
+
+            if (!IsImage(file.FileName))
+            {
+                errors.Add($"File '{file.FileName}' is not an image");
+                return errors;
+            }
+
+            if (file.Length > 10 * 1024 * 1024)
+            {
+                errors.Add($"File '{file.FileName}' is too large. Maximum allowed size is 10 MB");
+                return errors;
+            }
+
+            string imagePath = SaveImage(file, userId);
+            Image image = new Image(file, userId, imagePath);
+
+            _imageRepository.Create(image);
+            await _imageRepository.Save();
+
+            return errors;
+        }
+
+        private string SaveImage(IFormFile file, int userId)
+        {
+            string imagePath = Path.Combine("Images", userId.ToString(), Path.GetFileName(file.FileName));
+            string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), imagePath);
+
+            using (var fileStreamer = new FileStream(physicalPath, FileMode.Create))
+            {
+                file.CopyTo(fileStreamer);
+            }
+
+            return imagePath;
+        }
+
+        private bool IsImage(string fileName)
         {
             string[] imageExtensions = { ".png", ".jpg", ".jpeg", ".bmp", ".webp" };
+            string fileExtension = Path.GetExtension(fileName).ToLower();
             return imageExtensions.Contains(fileExtension);
         }
 

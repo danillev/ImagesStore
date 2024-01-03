@@ -14,7 +14,6 @@ namespace ImagesStore.API.Models
         [EmailAddress]
         public override string Email { get; set; }
 
-
     }
     
 }
